@@ -4,8 +4,8 @@
 # Copyright (C) 1996-2017 Markus F.X.J. Oberhumer
 #
 
-PROGRAM = compress-test
-SOURCES = compress-test.c minilzo.c
+PROGRAM = example
+SOURCES = example.c minilzo.c
 
 default:
 	@echo ""
