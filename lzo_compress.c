@@ -31,6 +31,10 @@
 
 #include "minilzo.h"
 
+#define MODE_UNDEFINED 0
+#define MODE_COMPRESS 1
+#define MODE_DECOMPRESS 2
+
 /* We want to compress the file data at 'in' with length 'IN_LEN' to
  * the file data at 'out'. Because the input block may be incompressible,
  * we must provide a little more output space in case that compression
@@ -55,6 +59,10 @@ static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 
 int main(int argc, char *argv[])
 {
+    char *source = NULL;
+	char *destination = NULL;
+	int mode = MODE_UNDEFINED;
+
     int r;
     lzo_uint in_len;
     lzo_uint out_len;
@@ -65,6 +73,40 @@ int main(int argc, char *argv[])
 
     if (argc < 0 && argv == NULL)   // avoid warning about unused args
         return 0;
+
+    // Parse the input array and retrive the values provided by the user.
+	char *c;
+	int i;
+	for(i = 1; i < argc; i++)
+	{
+		c = argv[i];
+		if (c[0] == '-')
+        {
+			if (c[1] == 'c')
+            {
+				mode = MODE_COMPRESS;
+			}
+			else if (c[1] == 'd')
+            {
+                mode = MODE_DECOMPRESS;
+            }
+		}
+		else
+        {
+			if (source == NULL)
+				source = c;
+			else
+				destination = c;
+		}
+	}
+
+    // Validate the user input and print USAGE if found wrong.    
+	if ( (mode == MODE_UNDEFINED) || (source == NULL) || (destination == NULL) )
+    {
+        printf("COMPRESS example:\n%s -c source dest.lzo\n",argv[0]);
+        printf("DECOMPRESS example:\n%s -d source.lzo dest\n",argv[0]);
+		exit(3);
+	}
 
     printf("\nLZO real-time data compression library (v%s, %s).\n\n",
            lzo_version_string(), lzo_version_date());
@@ -79,7 +121,7 @@ int main(int argc, char *argv[])
         return 3;
     }
 
-	switch(argv[1][0])
+	switch(argv[1][1])
     {
         case 'c':
             /*
