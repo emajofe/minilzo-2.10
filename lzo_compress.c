@@ -1,4 +1,4 @@
-/* compress-test.c -- very simple test program for the miniLZO library
+/* lzo_compress.c -- simple compression/decompression with the miniLZO library
 
    This file is part of the LZO real-time data compression library.
 
@@ -41,7 +41,7 @@
  * is not possible.
  */
 
-#define IN_LEN      (246*32768ul) //around 8Mb
+#define IN_LEN      (512*32768ul) //around 16Mb
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
 
 static unsigned char __LZO_MMODEL in  [ IN_LEN ];
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
             /*
              * Open file in binary mode (COMPRESS from this file).
              */
-            fp_in=fopen(argv[2],"rb");
+            fp_in=fopen(argv[2],"r");
             if (!fp_in) 
             {
                 fprintf(stdout, "Error: Unable to open file '%s'\n", argv[2]);
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
             /*
              * Open file in binary mode (COMPRESS to this file).
              */
-            fp_out=fopen(argv[3],"wb");
+            fp_out=fopen(argv[3],"w");
             if (!fp_out) 
             {
                 fprintf(stdout, "Error: Unable to open file '%s'\n", argv[3]);
@@ -190,13 +190,13 @@ int main(int argc, char *argv[])
                 return 0;
             }
 
-            printf("\nminiLZO simple compression test passed.\n");
+            printf("\nminiLZO simple compression done.\n");
             break;
         case 'd':
             /*
              * Open file in binary mode (DECOMPRESS from this file).
              */
-            fp_in=fopen(argv[2],"rb");
+            fp_in=fopen(argv[2],"r");
             if (!fp_in) 
             {
                 fprintf(stdout, "Error: Unable to open file '%s'\n", argv[2]);
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
             /*
              * Open file in binary mode (DECOMPRESS to this file).
              */
-            fp_out=fopen(argv[3],"wb");
+            fp_out=fopen(argv[3],"w");
             if (!fp_out) 
             {
                 fprintf(stdout, "Error: Unable to open file '%s'\n", argv[3]);
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
                 fclose(fp_out);
                 return 1;
             }
-            printf("\nminiLZO simple decompression test passed.\n");
+            printf("\nminiLZO simple decompression done.\n");
             break;
         default:break;
 	}
